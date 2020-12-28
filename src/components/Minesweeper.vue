@@ -1,8 +1,17 @@
 <template>
   <div class="minesweeper">
-    <div v-show="lost" class="lostMessage">
+    <div v-show="won" class="end won">
+      <span>( ͡° ͜ʖ ͡°)</span>
+      <span>nice</span>
+      <button @click="start()">
+        play again
+      </button>
+    </div>
+    <div v-show="lost" class="end lost">
       <span>¯\_(ツ)_/¯</span>
-      <button @click="start()">play again</button>
+      <button @click="start()">
+        play again
+      </button>
     </div>
     <div v-if="loaded" class="wrapper">
       <div v-for="(row, x) in gridDimensions[0]" class="row">
@@ -44,14 +53,15 @@ export default {
       return this.$store.getters["game/getMines"];
     },
     lost() {
-      return this.$store.getters["game/lost"];
+      return this.$store.getters["game/getLost"];
+    },
+    won() {
+      return this.$store.getters["game/getWon"];
     },
   },
   methods: {
-    start() {
-      logic.newGame({
-        gridDimensions: [13, 13],
-      });
+    start(options) {
+      logic.newGame(options);
     },
   },
   created() {
@@ -64,6 +74,7 @@ export default {
     );
     this.grid = this.$store.getters["game/getGrid"];
     this.loaded = true;
+    window.start = this.start;
   },
 };
 </script>
@@ -95,7 +106,7 @@ export default {
   flex-direction: row;
 }
 
-.lostMessage {
+.end {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -105,7 +116,7 @@ export default {
   width: 100%;
 }
 
-.lostMessage span {
+.end span {
   font-size: 17vw;
   max-width: 100%;
   font-weight: 700;
@@ -115,7 +126,7 @@ export default {
   pointer-events: none;
 }
 
-.lostMessage button {
+.end button {
   -webkit-appearance: none;
   text-decoration: none;
   padding: 0.8em 1.5em;
@@ -134,11 +145,11 @@ export default {
   border: none;
 }
 
-.lostMessage button:hover {
+.end button:hover {
   filter: brightness(0.9);
 }
 
-.lostMessage button:active {
+.end button:active {
   transform: translateY(2px);
   filter: saturate(110%) brightness(0.7);
 }

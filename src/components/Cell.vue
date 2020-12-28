@@ -71,7 +71,10 @@ export default {
       return _cell.exploded;
     },
     lost() {
-      return this.$store.getters["game/lost"];
+      return this.$store.getters["game/getLost"];
+    },
+    lost() {
+      return this.$store.getters["game/getWon"];
     },
     showFlag() {
       let mineAndLost = this.hasMine && this.lost;

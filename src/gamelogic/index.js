@@ -23,7 +23,7 @@ function defaultMineCount(dimensions) {
 }
 
 function flag(val, x, y) {
-    if (store.getters['game/lost']) return
+    if (store.getters['game/getGameEnded']) return
 
     let grid = { ...store.getters['game/getGrid'] };
     let _cell = grid[x][y]
@@ -45,7 +45,11 @@ function flag(val, x, y) {
     })
 }
 
-function endGame(x, y) {
+function wonGame() {
+    store.commit("game/WON_GAME")
+}
+
+function lostGame(x, y) {
     let grid = store.getters['game/getGrid'];
     let _cell = grid[x][y]
     let bomb = {
@@ -58,22 +62,28 @@ function endGame(x, y) {
         exploded: true
     }
 
-    store.commit("game/END_GAME", {
+    store.commit("game/LOST_GAME", {
         bomb: bomb
     })
 
 }
 
 function clearArea(x, y) {
-    if (store.getters['game/lost']) return
+    if (store.getters['game/getGameEnded']) return
 
     let gridDimensions = store.getters['game/getGridDimensions'];
     let grid = { ...store.getters['game/getGrid'] };
-    let clearedCells = []
+
+    let { clearedAmount, clearedCells } = store.getters['game/getCleared']
+    let newClearedCells = [...clearedCells]
+    let newClearedAmount = 0;
+    let totalCells = gridDimensions[0] * gridDimensions[1]
+    let bombCount = store.getters['game/getMines'];
+
     let __cell = grid[x][y]
     if (__cell.open) return;
 
-    if (__cell.hasMine) return endGame(x, y);
+    if (__cell.hasMine) return lostGame(x, y);
 
     function recursiveClear(x, y) {
         for (let nx = x - 1; nx <= x + 1; nx++) {
@@ -81,7 +91,7 @@ function clearArea(x, y) {
 
                 let id = nx + '' + ny;
 
-                if (clearedCells.indexOf(id) !== -1) {
+                if (newClearedCells.indexOf(id) !== -1) {
                     continue
                 }
 
@@ -108,7 +118,8 @@ function clearArea(x, y) {
                     exploded: _cell.exploded
                 }
 
-                clearedCells.push(id)
+                newClearedCells.push(id)
+                newClearedAmount++;
 
                 if (_cell.adjacentMines === 0) recursiveClear(nx, ny);
 
@@ -119,8 +130,19 @@ function clearArea(x, y) {
             }
         }
     }
-
     recursiveClear(x, y)
+
+    newClearedAmount = newClearedAmount + clearedAmount;
+
+    store.commit("game/UPDATE_CLEARED", {
+        clearedAmount: newClearedAmount,
+        clearedCells: newClearedCells
+    })
+
+    if (newClearedAmount >= totalCells - bombCount) {
+        wonGame()
+    }
+
 
 }
 
