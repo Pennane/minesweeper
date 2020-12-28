@@ -50,8 +50,7 @@ export default {
   methods: {
     start() {
       logic.newGame({
-        gridDimensions: [20, 20],
-        mineCount: 50,
+        gridDimensions: [13, 13],
       });
     },
   },
@@ -80,7 +79,6 @@ export default {
   display: flex;
   justify-content: center;
   position: relative;
-  overflow: hidden;
 }
 
 .wrapper {

@@ -3,7 +3,7 @@
     :class="{
       cell: true,
       opened: opened,
-      flagged: flagged,
+      flagged: showFlag,
       exploded: exploded,
       lost: lost && hasMine,
     }"
@@ -73,17 +73,21 @@ export default {
     lost() {
       return this.$store.getters["game/lost"];
     },
+    showFlag() {
+      let mineAndLost = this.hasMine && this.lost;
+      return this.flagged && !mineAndLost;
+    },
   },
 };
 </script>
 
 <style scoped>
 .cell {
-  font-size: 1.4em;
+  font-size: 1.2em;
   font-weight: 700;
   color: #767676;
-  width: 43px;
-  height: 43px;
+  width: 39px;
+  height: 39px;
   background: #c0c0c0;
   display: flex;
   justify-content: center;
@@ -112,7 +116,8 @@ export default {
 .mine {
   background-image: url("~@/assets/bomb.png");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 75%;
+  background-position: center;
   width: 100%;
   height: 100%;
 }
@@ -165,5 +170,13 @@ export default {
 
 .adjacent-8 {
   color: #808080;
+}
+
+@media screen and (max-width: 600px) {
+  .cell {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9em;
+  }
 }
 </style>

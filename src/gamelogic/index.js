@@ -19,7 +19,7 @@ function randomIntegerFromRange(min, max) {
 }
 
 function defaultMineCount(dimensions) {
-    return parseInt(dimensions[0] * dimensions[1] * 0.15)
+    return parseInt(dimensions[0] * dimensions[1] * 0.17)
 }
 
 function flag(val, x, y) {
