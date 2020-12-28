@@ -73,7 +73,7 @@ export default {
     lost() {
       return this.$store.getters["game/getLost"];
     },
-    lost() {
+    won() {
       return this.$store.getters["game/getWon"];
     },
     showFlag() {
@@ -134,9 +134,6 @@ export default {
 
 .exploded {
   background: red;
-}
-
-.lost .cell {
 }
 
 .adjacent-0 {

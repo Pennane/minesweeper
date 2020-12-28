@@ -1,7 +1,7 @@
 <template>
   <div class="minesweeper">
     <div v-show="won" class="end won">
-      <span>( ͡° ͜ʖ ͡°)</span>
+      <span class="lenny">( ͡° ͜ʖ ͡°)</span>
       <span>nice</span>
       <button @click="start()">
         play again
@@ -104,6 +104,11 @@ export default {
 
 .column {
   flex-direction: row;
+}
+
+.lenny {
+  font-size: calc(0.6em + 10vw);
+  margin-bottom: -0.2em;
 }
 
 .end {
