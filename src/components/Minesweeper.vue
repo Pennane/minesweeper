@@ -63,9 +63,17 @@ export default {
     start(options) {
       logic.newGame(options);
     },
+    track() {
+      this.$ga.page({
+        page: "/",
+        title: "Minesweeper homepage",
+        location: window.location.href,
+      });
+    },
   },
   created() {
     this.start();
+    this.track();
     this.$store.watch(
       (state, getters) => getters["game/getGrid"],
       (newValue, oldValue) => {
